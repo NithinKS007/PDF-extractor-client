@@ -11,8 +11,10 @@ const UserLayout = () => {
   };
   return (
     <div className="flex flex-col min-h-screen">
-      <TopNavbar handleLogout={handleLogout} />
-      <div className="flex flex-1">
+      <div className="fixed w-full top-0 left-0 z-50 bg-white shadow-md">
+        <TopNavbar handleLogout={handleLogout} />
+      </div>
+      <div className="mt-[60px] p-4 flex-grow">
         <div className="w-full">
           <Outlet />
         </div>

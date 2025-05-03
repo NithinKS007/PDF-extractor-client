@@ -5,7 +5,7 @@ interface TopNavBarProps {
 
 const TopNavbar: React.FC<TopNavBarProps> = ({ handleLogout }) => {
   return (
-    <header className="bg-gray-800 p-4 text-white">
+    <header className= "bg-gray-800 p-4 text-white">
       <div className="flex items-center justify-between">
         <div className="text-xl font-semibold">
           <Link to="/home">PDF EXTRACTOR</Link>
