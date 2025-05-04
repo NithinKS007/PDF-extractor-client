@@ -208,6 +208,41 @@ The application expects the following API endpoints:
 - `POST /api/auth/signIn` - Authenticate an existing user
 - `POST /api/auth/signOut` - Sign out the current user
 
+### 📚 Troubleshooting: PDF Worker Issue during Deployment
+When deploying the app, you might encounter an issue where the PDF worker file (pdf.worker.mjs) fails to load, resulting in errors like:
+
+Failed to load module script: The server responded with a non-JavaScript MIME type of "text/html". Strict MIME type checking is enforced for module scripts per HTML spec.
+This issue occurs because the pdf.worker.mjs file is not served correctly from the build or public directory during deployment. To resolve this issue in production environments (like Vercel or other hosting services), follow these steps:
+
+Steps to fix PDF worker issue:
+Ensure pdf.worker.mjs is added to the public directory:
+
+In your project, pdf.worker.mjs is located in node_modules/pdfjs-dist/build/. You need to manually copy this file to the public directory so it can be correctly served by the server.
+
+Add the following commands to your deployment pipeline or execute them locally:
+
+mkdir -p public/node_modules/pdfjs-dist/build
+cp node_modules/pdfjs-dist/build/pdf.worker.mjs public/node_modules/pdfjs-dist/build/pdf.worker.mjs
+This will ensure that the worker file is served correctly.
+
+Deploy to Vercel or another hosting platform:
+After adding the worker to the public directory, commit the changes, push them to your remote repository, and redeploy your app. The PDF worker should now be available and load correctly.
+
+Additional Notes:
+Ensure the public folder is not ignored by Git. If it is ignored, you might need to update the .gitignore to allow the public directory to be tracked. This can be done by adding an exception like so:
+
+
+# Ignore everything in the public folder (if exists)
+/public/
+
+# But track everything inside the public folder
+!/public/
+In case you're encountering issues with the public folder not being committed, you can manually add it to Git using:
+
+git add -f public/
+git commit -m "Fix PDF worker issue during deployment"
+git push origin main
+
 ## 🤝 Contributing
 
 1. Fork the repository
