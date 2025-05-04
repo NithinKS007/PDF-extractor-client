@@ -1,54 +1,217 @@
-# React + TypeScript + Vite
+# PDF Page Extractor
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React-based web application that allows users to upload PDF files, view individual pages, and extract selected pages into a new PDF document.
 
-Currently, two official plugins are available:
+### Screen Shots
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Upload PDF Screen
+![View Upload PDF](./assets/Screenshot%202025-05-04%20165249.png)
 
-## Expanding the ESLint configuration
+### View PDF Screen
+![View Uploaded List](./assets/Screenshot%202025-05-04%20165355.png)
+![View PDF Pages](./assets/Screenshot%202025-05-04%20165503.png)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Extract PDF Screen
+![Select Pages to Extract and Build New PDF](./assets/Screenshot%202025-05-04%20165432.png)
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### Authentication Screen
+![View Sign In](./assets/Screenshot%202025-05-04%20165133.png)
+![View Sign Up](./assets/Screenshot%202025-05-04%20165150.png)
+
+
+## 🌟 Features
+
+- PDF File Upload
+- PDF Preview with Thumbnails
+- High-Resolution Page Preview Modal
+- Page Selection and Arrangement for New PDF Creation and Extraction
+- Responsive Design
+- Toast Notifications for User Feedback:
+- Download the Extracted PDF
+- User Authentication for PDF Uploading:
+
+## 📁 Project Structure
+
+```
+client/
+│
+├── .env                        # Environment variables
+├── .gitignore                  # Git ignore configuration
+├── eslint.config.js            # ESLint configuration
+├── index.html                  # HTML template
+├── package.json                # Project dependencies and scripts
+├── package-lock.json           # Package lock for npm
+├── README.md                   # Project documentation
+├── tsconfig.app.json           # TypeScript configuration for app-specific settings
+├── tsconfig.json               # General TypeScript configuration
+├── tsconfig.node.json          # General TypeScript configuration
+├── vite-config.ts              # Vite-General-Config-file
+├── src/                        # Source code folder
+│   ├── api/                    # API service folder
+│   │   ├── auth.ts             # Authentication API requests
+│   │   ├── pdf.ts              # PDF-related API requests
+│   ├── components/             # React components
+│   │   ├── PdfCard.tsx         # PDF card component
+│   │   ├── PdfExtractModal.tsx # PDF extraction modal component
+│   │   ├── pdfUploadModal.tsx  # PDF upload modal component
+│   │   ├── ProtectedUser.tsx   # Protected user component
+│   │   ├── SignInForm.tsx      # Sign-in form component
+│   │   ├── SignUpForm.tsx      # Sign-up form component
+│   │   ├── TopNavBar.tsx       # Top navigation bar component
+│   │   ├── PdfView.tsx         # PDF view modal component
+│   ├── config/                 # Configuration files
+│   │   ├── axios.ts            # Axios configuration for API requests
+│   ├── hooks/                  # Custom React hooks
+│   ├── useExtractPdf.ts        # Hook for extracting PDF
+│   ├── usePdfDownload.ts       # Hook for downloading PDF
+│   ├── usePdfUpload.ts         # Hook for uploading PDF
+│   └── useViewPdf.ts           # Hook for viewing PDF
+
+│   ├── layouts/                # Layouts for pages
+│   │   ├── UserLayout.tsx      # Layout for user-related pages
+│   ├── pages/                  # Page components
+│   │   ├── AuthPage.tsx        # Authentication page
+│   │   ├── HomePage.tsx        # Homepage
+│   ├── store/                  # Redux or context store
+│   │   ├── auth/               # Auth store and types
+│   │   │   ├── authStore.ts    # Store for authentication state
+│   │   │   ├── authTypes.ts    # Types for authentication state
+│   │   ├── pdf/                # PDF store and types
+│   │   │   ├── pdfStore.ts     # Store for PDF-related state
+│   │   │   └── pdfTypes.ts     # Types for PDF-related state
+│   ├── types/                  # TypeScript type definitions
+│   │   ├── authTypes.ts        # Types for authentication
+│   │   ├── pdfTypes.ts         # Types for PDF operations
+│   ├── utils/                  # Utility functions
+│   │   ├── toast.ts            # Toast notification utility
+│   │   └── validationSchema.ts # Validation functions
+│   ├── vite-env.d.ts           # Vite build configuration (moved to src)
+│   ├── App.tsx                 # Main App component
+│   ├── Main.tsx                # Main entry point for React app
+│   ├── index.css               # Global CSS for the app
+
+├── node_modules/               # Node.js dependencies (auto-generated)
+│
+├── dist/                       # Compiled JavaScript files (after TypeScript transpilation)
+
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🚀 Getting Started
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Prerequisites
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+- Node.js (v22.15.0 or higher)
+- npm
+
+### Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/yourusername/PDF-extractor-client.git
+cd pdf-extractor-client
 ```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Start the development server:
+
+```bash
+npm run dev
+```
+
+4. Build for production:
+
+```bash
+npm run build
+```
+
+## 📦 Package Analysis
+
+### Current Dependencies Analysis
+
+#### Required Packages (Keep)
+
+```json
+{
+  "@tailwindcss/vite": "^4.1.4", // For Tailwind CSS integration with Vite
+  "@types/react-router-dom": "^5.3.3", // Type definitions for React Router DOM
+  "axios": "^1.9.0", // For making HTTP requests
+  "formik": "^2.4.6", // For form management
+  "pdfjs-dist": "^5.2.133", // Core PDF handling (for viewing and manipulation)
+  "react": "^19.0.0", // Core React library
+  "react-dom": "^19.0.0", // Core React DOM for rendering React components
+  "react-hot-toast": "^2.5.2", // For toast notifications (consider custom implementation)
+  "react-icons": "^5.5.0", // For including popular icons in React
+  "react-router-dom": "^7.5.3", // For navigation and routing in React apps
+  "tailwindcss": "^4.1.4", // For utility-first CSS framework
+  "yup": "^1.6.1", // For schema validation (used with Formik)
+  "zustand": "^5.0.3" // For state management (lightweight state management library)
+}
+```
+
+#### Development Dependencies (Keep)
+
+```json
+{
+  "@eslint/js": "^9.22.0", // ESLint core JavaScript configurations
+  "@types/pdfjs-dist": "^2.10.377", // Type definitions for pdfjs-dist
+  "@types/react": "^19.0.10", // Type definitions for React
+  "@types/react-dom": "^19.0.4", // Type definitions for React DOM
+  "@vitejs/plugin-react": "^4.3.4", // Vite React plugin for React-based apps
+  "eslint": "^9.22.0", // Linter for maintaining code quality
+  "eslint-plugin-react-hooks": "^5.2.0", // ESLint plugin for React Hooks linting
+  "eslint-plugin-react-refresh": "^0.4.19", // ESLint plugin for React Fast Refresh
+  "globals": "^16.0.0", // Provide global variables for linting
+  "typescript": "~5.7.2", // TypeScript for static type-checking
+  "typescript-eslint": "^8.26.1", // ESLint plugin for TypeScript linting
+  "vite": "^6.3.1" // Vite for fast builds and hot module reloading
+}
+```
+
+#### Unnecessary Packages (Can be removed)
+
+1. State Management (if not using Zustand for state management):
+
+"zustand"
+
+#### 🛠️ Technology Stack
+
+**React** - UI library (react, react-dom)
+**Vite** - Build tool (vite, @vitejs/plugin-react)
+**Tailwind CSS** - Styling (tailwindcss, @tailwindcss/vite)
+**PDF.js** - PDF processing (pdfjs-dist)
+**Axios** - HTTP client (axios)
+**Formik** - Form handling (formik, yup)
+**Zustand** - State management (zustand)
+**React Router** - Routing (react-router-dom)
+**React Hot Toast** - Notifications (react-hot-toast)
+**React Icons** - Icon library (react-icons)
+
+## 📄 API Endpoints
+
+The application expects the following API endpoints:
+
+📄 PDF API Endpoints
+
+- `POST /api/pdf/uploadPdf` - Upload a PDF file
+- `GET /api/pdf/retrieve` - Retrieve a list of all uploaded PDFs
+- `POST /api/pdf/extract/:pdfId` - Extract selected pages
+
+📄 Authentication API Endpoints
+
+- `POST /api/auth/signUp` - Register a new user
+- `POST /api/auth/signIn` - Authenticate an existing user
+- `POST /api/auth/signOut` - Sign out the current user
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/my-Feature`)
+3. Commit your changes (`git commit -m 'Add some my-Feature'`)
+4. Push to the branch (`git push origin feature/my-Feature`)
+5. Open a Pull Request

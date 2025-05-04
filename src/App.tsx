@@ -8,9 +8,12 @@ import { Toaster } from "react-hot-toast";
 const App = () => {
   return (
     <>
+      {/* Toaster component to show notifications */}
       <Toaster position="top-center" />
       <Routes>
+        {/* Public route for authentication page*/}
         <Route path="/" element={<AuthPage />} />
+        {/* Protected routes that require authentication */}
         <Route element={<ProtectedUser />}>
           <Route element={<UserLayout />}>
             <Route path="/home" element={<HomePage />} />
@@ -22,4 +25,3 @@ const App = () => {
 };
 
 export default App;
-

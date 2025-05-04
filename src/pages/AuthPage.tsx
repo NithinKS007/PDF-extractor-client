@@ -7,7 +7,7 @@ import SignUpForm from "../components/SignUpForm";
 import { signInUser, signUpUser } from "../api/auth";
 import { showErrorToast, showSuccessToast } from "../utils/toast";
 import { useNavigate } from "react-router-dom";
-import useAuthStore from "../store/auth";
+import useAuthStore from "../store/auth/authStore";
 
 const AuthPage: React.FC = () => {
   const [isSignIn, setIsSignIn] = useState<boolean>(true);

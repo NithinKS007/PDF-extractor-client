@@ -60,7 +60,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ formik, toggleAuthState }) => {
           {formik.isSubmitting ? <span>Loading...</span> : "Sign Up"}
         </button>
         <p className="mt-4 text-center">
-          Already have an account?{" "}
+          Already have an account?
           <button
             onClick={toggleAuthState}
             className="ml-1 text-blue-700 hover:underline"

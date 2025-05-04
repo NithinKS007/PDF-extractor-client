@@ -5,7 +5,15 @@ import { showErrorToast, showSuccessToast } from "../utils/toast";
 pdfjsLib.GlobalWorkerOptions.workerSrc =
   "/node_modules/pdfjs-dist/build/pdf.worker.mjs";
 
-const useExtractPdf = () => {
+interface ExtractPdfProps {
+  fetchPdfs: () => Promise<void>;
+}
+/**
+ * Custom hook for extracting and selecting pages from a PDF.
+ * Manages state for PDF URL, page extraction, modal visibility, and selected pages.
+ */
+
+const useExtractPdf = ({ fetchPdfs }: ExtractPdfProps) => {
   const [extractModalOpen, setExtractModalOpen] = useState<boolean>(false);
   const [extractPdfUrl, setExtractPdfUrl] = useState<string | null>(null);
   const [pdfPages, setPdfPages] = useState<{ [key: number]: string }>({});
@@ -24,6 +32,12 @@ const useExtractPdf = () => {
     setError(null);
   };
 
+  /**
+   * Set the PDF URL and open the extraction modal.
+   * The URL is for the PDF from which pages will be extracted.
+   * The PDF ID is the unique identifier of the PDF.
+   */
+
   const handleSetExtractPdfUrl = (url: string, pdfId: string) => {
     setSelectedPdfId(pdfId);
     setExtractPdfUrl(url);
@@ -40,6 +54,11 @@ const useExtractPdf = () => {
         : [...prev, pageNum]
     );
   }, []);
+
+  /**
+   * Extract pages from the given PDF URL.
+   * The pages are rendered as images and stored in the state.
+   */
   const extractPdfPages = useCallback(async (url: string): Promise<void> => {
     try {
       setPdfPagesLoading(true);
@@ -78,6 +97,10 @@ const useExtractPdf = () => {
     }
   }, [extractPdfUrl, extractModalOpen, extractPdfPages, selectedPdfId]);
 
+  /**
+   * Submit the selected pages for extraction.
+   * Sends the selected pages to the backend for processing.
+   */
   const handleSubmitSelectedPages = async () => {
     setIsExtractPagesSubmitLoading(true);
     try {
@@ -87,6 +110,7 @@ const useExtractPdf = () => {
           pdfId: selectedPdfId,
         });
         showSuccessToast(response.message);
+        await fetchPdfs();
         handleCloseExtractModal();
       } else {
         showErrorToast("Please select at least one page.");
@@ -99,7 +123,6 @@ const useExtractPdf = () => {
       showErrorToast(errorMessage);
     } finally {
       console.log("Pdf upload complete");
-
       setIsExtractPagesSubmitLoading(false);
     }
   };

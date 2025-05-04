@@ -10,12 +10,14 @@ interface PdfCardProps {
   pdf: Pdf;
   onDownload: () => void;
   onExtractClick: () => void;
+  onViewClick: () => void;
 }
 
 const PdfCard: React.FC<PdfCardProps> = ({
   pdf,
   onDownload,
   onExtractClick,
+  onViewClick
 }) => {
   return (
     <div className="w-11/12 mt-5 mx-auto p-4 bg-white rounded-lg shadow-md">
@@ -39,7 +41,12 @@ const PdfCard: React.FC<PdfCardProps> = ({
         >
           Extract PDF
         </button>
-
+        <button
+          onClick={onViewClick}
+          className="text-blue-500 hover:text-blue-700 text-xs cursor-pointer"
+        >
+          View
+        </button>
         <button
           onClick={onDownload}
           className="text-blue-500 hover:text-blue-700 text-xs cursor-pointer"

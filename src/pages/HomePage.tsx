@@ -1,68 +1,21 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import PdfUploadModal from "../components/PdfUploadModal";
-import { useFormik } from "formik";
-import { pdfValidation } from "../utils/validationSchema";
-import { showErrorToast, showSuccessToast } from "../utils/toast";
-import { getPdfs, uploadPdf } from "../api/pdf";
-import usePdfStore from "../store/pdfs";
+import { showErrorToast } from "../utils/toast";
+import { getPdfs } from "../api/pdf";
+import usePdfStore from "../store/pdf/pdfStore";
 import PdfCard from "../components/pdfCard";
 import PdfExtractModal from "../components/PdfExtractModal";
 import useExtractPdf from "../hooks/useExtractPdf";
+import usePdfDownload from "../hooks/usePdfDownload";
+import useUploadPdf from "../hooks/usePdfUpload";
+import useViewPdf from "../hooks/useViewPdf";
+import PdfView from "../components/PdfView";
 
 const HomePage = () => {
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  /* Extracted PDF data and loading state from the store */
   const { setPdfs, setLoading, pdfs: pdfDataList, isLoading } = usePdfStore();
 
-  const {
-    extractModalOpen,
-    handleSetExtractPdfUrl,
-    handleCloseExtractModal,
-    pdfPages,
-    isPdfPagesLoading,
-    error,
-    selectedPages,
-    handlePageClick,
-    handleSubmitSelectedPages,
-    isExtractPagesSubmitLoading
-  } = useExtractPdf();
-
-  const toggleModal = () => {
-    formik.resetForm();
-    setIsModalOpen(!isModalOpen);
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files ? e.target.files[0] : null;
-    formik.setFieldValue("file", file);
-  };
-
-  const formik = useFormik({
-    initialValues: {
-      file: null as File | null,
-    },
-    validationSchema: pdfValidation,
-    onSubmit: async (value) => {
-      if (value.file) {
-        try {
-          const formData = new FormData();
-          formData.append("file", value.file);
-          const response = await uploadPdf(formData);
-          await fetchPdfs();
-          showSuccessToast(response.message);
-        } catch (error: any) {
-          console.log(`API Error upload pdf ${error}`);
-          const errorMessage =
-            error.response?.data?.message ||
-            "Error uploading pdf. Please try again.";
-          showErrorToast(errorMessage);
-        } finally {
-          console.log("Pdf upload complete");
-          toggleModal();
-        }
-      }
-    },
-  });
-
+  /* Fetch PDF list from the API */
   const fetchPdfs = async () => {
     setLoading(true);
     try {
@@ -84,30 +37,48 @@ const HomePage = () => {
     fetchPdfs();
   }, [setPdfs, setLoading]);
 
-  const handleDownload = async (pdfUrl: string, fileName: string) => {
-    try {
-      const fileResponse = await fetch(pdfUrl);
+  /* State and methods for handling PDF extraction and modal */
+  const {
+    extractModalOpen,
+    handleSetExtractPdfUrl,
+    handleCloseExtractModal,
+    pdfPages,
+    isPdfPagesLoading,
+    error,
+    selectedPages,
+    handlePageClick,
+    handleSubmitSelectedPages,
+    isExtractPagesSubmitLoading,
+  } = useExtractPdf({ fetchPdfs });
 
-      if (!fileResponse.ok) {
-        throw new Error("Failed to fetch the file");
-      }
-      const blob = await fileResponse.blob();
-      const blobUrl = URL.createObjectURL(blob);
-      const downloadLink = document.createElement("a");
-      downloadLink.href = blobUrl;
-      downloadLink.download = fileName;
-      downloadLink.click();
-      URL.revokeObjectURL(blobUrl);
-    } catch (error) {
-      console.error("Download error:", error);
-      showErrorToast(
-        "There was an issue downloading the PDF. Please try again."
-      );
-    }
-  };
+  /* Handle the PDF download functionality */
+  const { handleDownload } = usePdfDownload();
+
+  /* Handle the PDF uploading functionality */
+  const { toggleModal, isModalOpen, handleFileChange, formik } = useUploadPdf({
+    fetchPdfs,
+  });
+
+  /* useViewPdf hook for viewing PDF functionality */
+  const {
+    currentPage,
+    totalPages,
+    pdfDoc,
+    handleNextPage,
+    handlePrevPage,
+    handleViewClick,
+    isViewModalOpen,
+    selectedPdfUrl,
+    viewModalClose,
+    canvasRef,
+  } = useViewPdf();
 
   if (isLoading) {
-    return <div>Loading....</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="border-t-4 border-blue-950 border-solid w-16 h-16 rounded-full animate-spin-fast"></div>
+      </div>
+    );
   }
 
   return (
@@ -136,12 +107,13 @@ const HomePage = () => {
               key={pdf._id}
               onDownload={() => handleDownload(pdf.pdfUrl, pdf.fileName)}
               onExtractClick={() => handleSetExtractPdfUrl(pdf.pdfUrl, pdf._id)}
+              onViewClick={() => handleViewClick(pdf.pdfUrl)}
             />
           ))
         ) : (
           <div className="col-span-full flex justify-center items-center h-full">
-          <p className="text-center">No PDFs available.</p>
-        </div>
+            <p className="text-center">No PDFs available.</p>
+          </div>
         )}
       </div>
 
@@ -183,6 +155,16 @@ const HomePage = () => {
               : [<p key="no-pages">No pages extracted.</p>]
           }
           onSubmit={handleSubmitSelectedPages}
+        />
+      )}
+      {isViewModalOpen && selectedPdfUrl && pdfDoc && (
+        <PdfView
+          onClose={viewModalClose}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          handleNextPage={handleNextPage}
+          handlePrevPage={handlePrevPage}
+          canvasRef={canvasRef}
         />
       )}
     </>

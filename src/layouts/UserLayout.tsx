@@ -1,6 +1,6 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import TopNavbar from "../components/TopNavBar";
-import useAuthStore from "../store/auth";
+import useAuthStore from "../store/auth/authStore";
 
 const UserLayout = () => {
   const { logout } = useAuthStore();

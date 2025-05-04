@@ -18,7 +18,7 @@ const PdfExtractModal: React.FC<PdfExtractModalProps> = ({
 }) => {
   return (
     <div className="fixed inset-0 flex justify-center items-center z-50 bg-black/50">
-      <div className="bg-white w-[100%] max-w-[90vw] h-[80vh] p-6 rounded-lg flex flex-col">
+      <div className="bg-white w-[100%] max-w-[90vw] h-[90vh] p-6 rounded-lg flex flex-col">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-bold">SELECT PAGES TO EXTRACT</h2>
           <button
