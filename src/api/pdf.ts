@@ -38,12 +38,15 @@ const getPdfs = async ({ page, limit }: { page: number; limit: number }) => {
 const extractPages = async ({
   pages,
   pdfId,
+  pdfName
 }: {
   pages: number[];
   pdfId: string;
+  pdfName: string;
 }) => {
   const response = await axiosInstance.post(`pdf/extract/${pdfId}`, {
     pages: pages,
+    fileName: pdfName,
   });
   return response.data;
 };

@@ -6,7 +6,7 @@ import { SignInValues, SignUpValues } from "../types/authTypes";
   Ensures that the user provides a valid name, email, and password.
   Returns: Yup validation schema for the sign-up form.
 */
-const signUpValidation = ():Yup.ObjectSchema<SignUpValues> => {
+const signUpValidation = (): Yup.ObjectSchema<SignUpValues> => {
   return Yup.object({
     name: Yup.string().required("Name is required"),
     email: Yup.string()
@@ -21,7 +21,7 @@ const signUpValidation = ():Yup.ObjectSchema<SignUpValues> => {
   Ensures that the user provides a valid email and password.
   Returns: Yup validation schema for the sign-in form.
 */
-const signInValidation = ():Yup.ObjectSchema<SignInValues> => {
+const signInValidation = (): Yup.ObjectSchema<SignInValues> => {
   return Yup.object({
     email: Yup.string()
       .email("Invalid email address")
@@ -42,6 +42,7 @@ const pdfValidation = () => {
       .test("fileFormat", "Only PDF files are supported", (value) => {
         return value && (value as File).type === "application/pdf";
       }),
+    fileName: Yup.string().required("File name is required"), 
   });
 };
 export { signInValidation, signUpValidation, pdfValidation };

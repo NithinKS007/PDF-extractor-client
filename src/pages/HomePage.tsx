@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import PdfUploadModal from "../components/PdfUploadModal";
 import { showErrorToast } from "../utils/toast";
 import { getPdfs } from "../api/pdf";
@@ -79,6 +79,8 @@ const HomePage = () => {
     handlePageClick,
     handleSubmitSelectedPages,
     isExtractPagesSubmitLoading,
+    selectedPdfName,
+    setSelectedPdfName
   } = useExtractPdf({ fetchPdfs });
 
   /* Handle the PDF download functionality */
@@ -136,7 +138,9 @@ const HomePage = () => {
               pdf={pdf}
               key={pdf._id}
               onDownload={() => handleDownload(pdf.pdfUrl, pdf.fileName)}
-              onExtractClick={() => handleSetExtractPdfUrl(pdf.pdfUrl, pdf._id)}
+              onExtractClick={() =>
+                handleSetExtractPdfUrl(pdf.pdfUrl, pdf._id, pdf.fileName)
+              }
               onViewClick={() => handleViewClick(pdf.pdfUrl)}
             />
           ))
@@ -157,6 +161,8 @@ const HomePage = () => {
           onClose={handleCloseExtractModal}
           isLoading={isExtractPagesSubmitLoading}
           selectedPages={selectedPages}
+          pdfName={selectedPdfName}
+          onPdfNameChange={setSelectedPdfName}
           pages={
             error
               ? [

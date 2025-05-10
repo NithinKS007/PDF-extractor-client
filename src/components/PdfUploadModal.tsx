@@ -30,6 +30,22 @@ const PdfUploadModal: React.FC<PdfUploadModalProps> = ({
               </div>
             )}
           </div>
+          <div className="mb-4">
+            <input
+              type="text"
+              name="fileName"
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              value={formik.values.fileName}
+              placeholder="Enter file name"
+              className="w-full p-2 border border-gray-300 rounded bg-gray-50 text-gray-700"
+            />
+            {formik.touched.fileName && formik.errors.fileName && (
+              <div className="text-red-500 text-sm mt-2">
+                {formik.errors.fileName}
+              </div>
+            )}
+          </div>
           <div className="flex gap-2">
             <button
               type="button"

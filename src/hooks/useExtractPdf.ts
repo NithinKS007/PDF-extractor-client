@@ -20,9 +20,11 @@ const useExtractPdf = ({ fetchPdfs }: ExtractPdfProps) => {
   const [isPdfPagesLoading, setPdfPagesLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedPages, setSelectedPages] = useState<number[]>([]);
-  const [selectedPdfId, setSelectedPdfId] = useState<string>();
+  const [selectedPdfId, setSelectedPdfId] = useState<string>("");
   const [isExtractPagesSubmitLoading, setIsExtractPagesSubmitLoading] =
     useState<boolean>(false);
+
+  const [selectedPdfName, setSelectedPdfName] = useState<string>("");
 
   const handleOpenExtractModal = () => setExtractModalOpen(true);
   const handleCloseExtractModal = () => {
@@ -30,6 +32,7 @@ const useExtractPdf = ({ fetchPdfs }: ExtractPdfProps) => {
     setPdfPages({});
     setSelectedPages([]);
     setError(null);
+    setSelectedPdfName("");
   };
 
   /**
@@ -38,9 +41,14 @@ const useExtractPdf = ({ fetchPdfs }: ExtractPdfProps) => {
    * The PDF ID is the unique identifier of the PDF.
    */
 
-  const handleSetExtractPdfUrl = (url: string, pdfId: string) => {
+  const handleSetExtractPdfUrl = (
+    url: string,
+    pdfId: string,
+    pdfName: string
+  ) => {
     setSelectedPdfId(pdfId);
     setExtractPdfUrl(url);
+    setSelectedPdfName(pdfName);
     setPdfPages({});
     setSelectedPages([]);
     setError(null);
@@ -104,16 +112,23 @@ const useExtractPdf = ({ fetchPdfs }: ExtractPdfProps) => {
   const handleSubmitSelectedPages = async () => {
     setIsExtractPagesSubmitLoading(true);
     try {
-      if (selectedPages && selectedPdfId && selectedPages.length > 0) {
+      if (
+        selectedPages &&
+        selectedPdfId &&
+        selectedPdfName.trim() !== "" &&
+        selectedPdfName &&
+        selectedPages.length > 0
+      ) {
         const response = await extractPages({
           pages: selectedPages,
           pdfId: selectedPdfId,
+          pdfName: selectedPdfName,
         });
         showSuccessToast(response.message);
         await fetchPdfs();
         handleCloseExtractModal();
       } else {
-        showErrorToast("Please select at least one page.");
+        showErrorToast("Please select at least one page and provide a valid PDF name.");
       }
     } catch (error: any) {
       console.log(`API Error extract pdf ${error}`);
@@ -139,6 +154,8 @@ const useExtractPdf = ({ fetchPdfs }: ExtractPdfProps) => {
     handleSubmitSelectedPages,
     handlePageClick,
     isExtractPagesSubmitLoading,
+    selectedPdfName,
+    setSelectedPdfName,
   };
 };
 

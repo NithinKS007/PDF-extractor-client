@@ -20,16 +20,19 @@ const useUploadPdf = ({ fetchPdfs }: ExtractPdfProps) => {
   const formik = useFormik({
     initialValues: {
       file: null as File | null,
+      fileName: "", 
     },
     validationSchema: pdfValidation,
     onSubmit: async (value: CreatePdf) => {
-      if (value.file) {
+      if (value.file && value.fileName) {
         try {
           const formData = new FormData();
           formData.append("file", value.file);
+          formData.append("fileName", value.fileName);
           const response = await uploadPdf(formData);
           await fetchPdfs();
           showSuccessToast(response.message);
+          toggleModal();
         } catch (error: any) {
           console.log(`API Error upload pdf ${error}`);
           const errorMessage =
@@ -38,7 +41,7 @@ const useUploadPdf = ({ fetchPdfs }: ExtractPdfProps) => {
           showErrorToast(errorMessage);
         } finally {
           console.log("Pdf upload complete");
-          toggleModal();
+         
         }
       }
     },

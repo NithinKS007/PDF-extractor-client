@@ -7,6 +7,8 @@ interface PdfExtractModalProps {
   onSubmit: () => void;
   isLoading: boolean;
   selectedPages: number[];
+  pdfName: string;
+  onPdfNameChange: (newName: string) => void;
 }
 
 const PdfExtractModal: React.FC<PdfExtractModalProps> = ({
@@ -15,12 +17,23 @@ const PdfExtractModal: React.FC<PdfExtractModalProps> = ({
   onSubmit,
   isLoading,
   selectedPages,
+  pdfName,
+  onPdfNameChange,
 }) => {
   return (
     <div className="fixed inset-0 flex justify-center items-center z-50 bg-black/50">
       <div className="bg-white w-[100%] max-w-[90vw] h-[90vh] p-6 rounded-lg flex flex-col">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-bold">SELECT PAGES TO EXTRACT</h2>
+          <div className="flex items-center">
+            <h2 className="text-lg font-bold mr-4">SELECT PAGES TO EXTRACT</h2>
+            <h2 className="text-lg font-bold mr-4"> - FILE NAME</h2>
+            <input
+              type="text"
+              value={pdfName}
+              onChange={(e) => onPdfNameChange(e.target.value)}
+              className="text-lg font-bold border-2 border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-52"
+            />
+          </div>
           <button
             onClick={onClose}
             className="bg-gray-200 px-4 py-2 cursor-pointer rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
