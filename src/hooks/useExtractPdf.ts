@@ -10,7 +10,7 @@ interface ExtractPdfProps {
 }
 /**
  * Custom hook for extracting and selecting pages from a PDF.
- * Manages state for PDF URL, page extraction, modal visibility, and selected pages.
+ * Manages state for PDF URL, page extraction, modal visibility,Adding name and selected pages.
  */
 
 const useExtractPdf = ({ fetchPdfs }: ExtractPdfProps) => {
@@ -39,6 +39,7 @@ const useExtractPdf = ({ fetchPdfs }: ExtractPdfProps) => {
    * Set the PDF URL and open the extraction modal.
    * The URL is for the PDF from which pages will be extracted.
    * The PDF ID is the unique identifier of the PDF.
+   * The PDF Name is required.
    */
 
   const handleSetExtractPdfUrl = (

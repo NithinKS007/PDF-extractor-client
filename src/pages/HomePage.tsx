@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import PdfUploadModal from "../components/PdfUploadModal";
 import { showErrorToast } from "../utils/toast";
 import { getPdfs } from "../api/pdf";
@@ -13,6 +13,16 @@ import PdfView from "../components/PdfView";
 import PaginationTable from "../components/Pagination";
 
 const HomePage = () => {
+  const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSearchClick = () => {
+    setPagination({ ...pagination, currentPage: 1, page: 1 });
+    fetchPdfs(); 
+  };
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
     newPage: number
@@ -44,6 +54,7 @@ const HomePage = () => {
       const response = await getPdfs({
         page: currentPageNumber,
         limit: pagination.limit,
+        searchQuery: searchQuery,
       });
       setPdfs(response.data.pdfs);
       setPagination({
@@ -62,7 +73,6 @@ const HomePage = () => {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchPdfs();
   }, [page]);
@@ -80,7 +90,7 @@ const HomePage = () => {
     handleSubmitSelectedPages,
     isExtractPagesSubmitLoading,
     selectedPdfName,
-    setSelectedPdfName
+    setSelectedPdfName,
   } = useExtractPdf({ fetchPdfs });
 
   /* Handle the PDF download functionality */
@@ -115,6 +125,22 @@ const HomePage = () => {
 
   return (
     <>
+      <div className="flex justify-center">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          placeholder="Search..."
+          className="w-48 p-2 border border-gray-300 rounded-lg text-black mr-4"
+        />
+        <button
+          onClick={handleSearchClick}
+          className="bg-gray-800 hover:bg-gray-500 text-white px-4 py-2 rounded-lg mr-4 cursor-pointer"
+        >
+          Search
+        </button>
+      </div>
+
       <div className="flex justify-end">
         <button
           onClick={toggleModal}

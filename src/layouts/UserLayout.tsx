@@ -13,11 +13,12 @@ const UserLayout = () => {
       showSuccessToast(response.message);
       logout();
       navigate("/");
-    } catch (error) {
-      console.log("Error during sign-out:", error);
+    } catch (error:any) {
+      console.log("Error during sign-out:", error.message);
       showErrorToast("Something went wrong while signing out. Please try again.");
     }
   };
+  
   
   return (
     <div className="flex flex-col min-h-screen">

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+
 interface TopNavBarProps {
   handleLogout: () => void;
 }
@@ -10,12 +11,14 @@ const TopNavbar: React.FC<TopNavBarProps> = ({ handleLogout }) => {
         <div className="text-xl font-semibold">
           <Link to="/home">PDF EXTRACTOR</Link>
         </div>
-        <button
-          onClick={handleLogout}
-          className="hover:text-gray-400 cursor-pointer"
-        >
-          LOGOUT
-        </button>
+        <div className="flex items-center">
+          <button
+            onClick={handleLogout}
+            className="hover:text-gray-400 cursor-pointer"
+          >
+            LOGOUT
+          </button>
+        </div>
       </div>
     </header>
   );

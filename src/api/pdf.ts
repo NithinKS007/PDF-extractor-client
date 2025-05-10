@@ -2,7 +2,9 @@ import { axiosInstance } from "../config/axios";
 
 /*  
     Purpose: Uploads a PDF file to the backend.
-    Incoming: pdf - A FormData object containing the PDF file. The file is attached with the key `file`.
+    Incoming:    
+      - pdf: A FormData object containing the PDF file. The file is attached with the key `file`.
+      - fileName: The name of the PDF file.
     Returns: The server's response, which contains information about the uploaded PDF (HTTP 200).
     Throws: An error if the request fails or returns an error.
 */
@@ -20,9 +22,17 @@ const uploadPdf = async (pdf: FormData) => {
     Returns: A list of PDF objects from the backend (HTTP 200).
     Throws: An error if the request fails or returns an error.
 */
-const getPdfs = async ({ page, limit }: { page: number; limit: number }) => {
+const getPdfs = async ({
+  page,
+  limit,
+  searchQuery,
+}: {
+  page: number;
+  limit: number;
+  searchQuery: string;
+}) => {
   const response = await axiosInstance.get("pdf/retrieve", {
-    params: { page, limit },
+    params: { page, limit, searchQuery },
   });
   return response.data;
 };
@@ -32,13 +42,14 @@ const getPdfs = async ({ page, limit }: { page: number; limit: number }) => {
     Incoming: params - An object containing the `pages` to extract and the `pdfId` of the target PDF.
     - pages: A list of page numbers to extract from the PDF.
     - pdfId: The unique identifier of the PDF to extract pages from.
+    - pdfName: The desired name for the newly created PDF.
     Returns: The server's response with the extracted pages (HTTP 200).
     Throws: An error if the request fails or returns an error.
 */
 const extractPages = async ({
   pages,
   pdfId,
-  pdfName
+  pdfName,
 }: {
   pages: number[];
   pdfId: string;

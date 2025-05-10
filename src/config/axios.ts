@@ -15,6 +15,7 @@ const axiosInstance: AxiosInstance = axios.create({
   This interceptor adds the access token from the store to the Authorization header for every outgoing request.
 */
 const setupRequestInterceptor = (instance: AxiosInstance) => {
+  console.log("Setting up response interceptor...");
   instance.interceptors.request.use(
     (config) => {
       const accessToken = useAuthStore.getState().accessToken;
@@ -36,7 +37,6 @@ const setupResponseInterceptor = (instance: AxiosInstance) => {
   instance.interceptors.response.use(
     (response) => response,
     async (error) => {
-      console.log("e",error)
       const originalRequest = error.config;
 
       if (error.response && error?.response?.data?.status === 403) {
@@ -44,7 +44,6 @@ const setupResponseInterceptor = (instance: AxiosInstance) => {
         useAuthStore.getState().logout();
         window.location.href = "/";
       }
-      console.log(error.response,"error")
       if (
         error.response &&
         error?.response.data?.status === 401 &&
@@ -58,7 +57,6 @@ const setupResponseInterceptor = (instance: AxiosInstance) => {
             {},
             { withCredentials: true }
           );
-          console.log("res token refresh",response)
           const { newAccessToken } = response.data.data;
           useAuthStore.getState().setAccessToken(newAccessToken);
           originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
