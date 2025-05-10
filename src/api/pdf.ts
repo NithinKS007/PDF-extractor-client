@@ -20,8 +20,10 @@ const uploadPdf = async (pdf: FormData) => {
     Returns: A list of PDF objects from the backend (HTTP 200).
     Throws: An error if the request fails or returns an error.
 */
-const getPdfs = async () => {
-  const response = await axiosInstance.get("pdf/retrieve");
+const getPdfs = async ({ page, limit }: { page: number; limit: number }) => {
+  const response = await axiosInstance.get("pdf/retrieve", {
+    params: { page, limit },
+  });
   return response.data;
 };
 

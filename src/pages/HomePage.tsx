@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import PdfUploadModal from "../components/PdfUploadModal";
 import { showErrorToast } from "../utils/toast";
 import { getPdfs } from "../api/pdf";
@@ -10,17 +10,47 @@ import usePdfDownload from "../hooks/usePdfDownload";
 import useUploadPdf from "../hooks/usePdfUpload";
 import useViewPdf from "../hooks/useViewPdf";
 import PdfView from "../components/PdfView";
+import PaginationTable from "../components/Pagination";
 
 const HomePage = () => {
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    newPage: number
+  ) => {
+    console.log("event", event);
+    setPagination({ page: newPage, currentPage: newPage });
+  };
+
   /* Extracted PDF data and loading state from the store */
-  const { setPdfs, setLoading, pdfs: pdfDataList, isLoading } = usePdfStore();
+  const {
+    setPdfs,
+    setLoading,
+    pdfs: pdfDataList,
+    isLoading,
+    pagination,
+    setPagination,
+  } = usePdfStore();
+
+  const {
+    totalPages: totalPageCount,
+    currentPage: currentPageNumber,
+    page,
+  } = pagination;
 
   /* Fetch PDF list from the API */
   const fetchPdfs = async () => {
     setLoading(true);
     try {
-      const response = await getPdfs();
+      const response = await getPdfs({
+        page: currentPageNumber,
+        limit: pagination.limit,
+      });
       setPdfs(response.data.pdfs);
+      setPagination({
+        currentPage: response.data.currentPage,
+        totalPages: response.data.totalPages,
+        page: response.data.currentPage,
+      });
     } catch (error: any) {
       console.log(`API Error retrieving pdfs ${error}`);
       const errorMessage =
@@ -35,7 +65,7 @@ const HomePage = () => {
 
   useEffect(() => {
     fetchPdfs();
-  }, [setPdfs, setLoading]);
+  }, [page]);
 
   /* State and methods for handling PDF extraction and modal */
   const {
@@ -116,6 +146,11 @@ const HomePage = () => {
           </div>
         )}
       </div>
+      <PaginationTable
+        totalPages={totalPageCount}
+        page={currentPageNumber}
+        handlePageChange={handlePageChange}
+      />
 
       {extractModalOpen && (
         <PdfExtractModal

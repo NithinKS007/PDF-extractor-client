@@ -11,6 +11,12 @@ export interface Pdf {
   updatedAt: Date;
 }
 
+export interface Pagination{
+    totalPages: number;
+    currentPage: number;
+    limit: number;
+    page: number;
+}
 /**
  * Represents the state of PDFs.
  * Contains an array of PDFs and Set functionalities for PDF store.
@@ -20,4 +26,6 @@ export interface PdfState {
   isLoading: boolean;
   setPdfs: (pdfs: Pdf[]) => void;
   setLoading: (isLoading: boolean) => void;
+  setPagination: (pagination: Partial<Pagination>) => void;
+  pagination: Pagination
 }

@@ -31,6 +31,7 @@ const AuthPage: React.FC = () => {
       console.log("Sign In values", values);
       try {
         const response = await signInUser(values);
+        console.log("singnin response",response)
         useAuthStore.getState().setAuthData(response.data.userData);
         useAuthStore.getState().setAccessToken(response.data.accessToken);
         showSuccessToast(response.message);
