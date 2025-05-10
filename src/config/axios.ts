@@ -38,14 +38,14 @@ const setupResponseInterceptor = (instance: AxiosInstance) => {
     async (error) => {
       const originalRequest = error.config;
 
-      if (error?.response && error?.response?.data?.status === 403) {
-        showErrorToast(error?.response?.data?.message);
+      if (error.response && error?.response?.data?.status === 403) {
+        showErrorToast(error?.response.data?.message);
         useAuthStore.getState().logout();
         window.location.href = "/";
       }
       if (
-        error?.response &&
-        error?.response?.data?.status === 401 &&
+        error.response &&
+        error?.response.data?.status === 401 &&
         !originalRequest._retry
       ) {
         originalRequest._retry = true;
