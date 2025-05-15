@@ -25,6 +25,7 @@ const useExtractPdf = ({ fetchPdfs }: ExtractPdfProps) => {
     useState<boolean>(false);
 
   const [selectedPdfName, setSelectedPdfName] = useState<string>("");
+  const [deleteExistingPdf, setDeleteExistingPdf] = useState<boolean>(true);
 
   const handleOpenExtractModal = () => setExtractModalOpen(true);
   const handleCloseExtractModal = () => {
@@ -33,6 +34,10 @@ const useExtractPdf = ({ fetchPdfs }: ExtractPdfProps) => {
     setSelectedPages([]);
     setError(null);
     setSelectedPdfName("");
+  };
+
+  const handleDeleteExistingPDF = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDeleteExistingPdf(event.target.checked);
   };
 
   /**
@@ -124,12 +129,15 @@ const useExtractPdf = ({ fetchPdfs }: ExtractPdfProps) => {
           pages: selectedPages,
           pdfId: selectedPdfId,
           pdfName: selectedPdfName,
+          deleteExistingPdf:deleteExistingPdf
         });
         showSuccessToast(response.message);
         await fetchPdfs();
         handleCloseExtractModal();
       } else {
-        showErrorToast("Please select at least one page and provide a valid PDF name.");
+        showErrorToast(
+          "Please select at least one page and provide a valid PDF name."
+        );
       }
     } catch (error: any) {
       console.log(`API Error extract pdf ${error}`);
@@ -157,6 +165,8 @@ const useExtractPdf = ({ fetchPdfs }: ExtractPdfProps) => {
     isExtractPagesSubmitLoading,
     selectedPdfName,
     setSelectedPdfName,
+    deleteExistingPdf,
+    handleDeleteExistingPDF
   };
 };
 

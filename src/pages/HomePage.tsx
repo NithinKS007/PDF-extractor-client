@@ -21,7 +21,7 @@ const HomePage = () => {
 
   const handleSearchClick = () => {
     setPagination({ ...pagination, currentPage: 1, page: 1 });
-    fetchPdfs(); 
+    fetchPdfs();
   };
   const handlePageChange = (
     event: React.ChangeEvent<unknown>,
@@ -91,6 +91,8 @@ const HomePage = () => {
     isExtractPagesSubmitLoading,
     selectedPdfName,
     setSelectedPdfName,
+    deleteExistingPdf,
+    handleDeleteExistingPDF,
   } = useExtractPdf({ fetchPdfs });
 
   /* Handle the PDF download functionality */
@@ -189,6 +191,8 @@ const HomePage = () => {
           selectedPages={selectedPages}
           pdfName={selectedPdfName}
           onPdfNameChange={setSelectedPdfName}
+          handleDeleteExistingPDF={handleDeleteExistingPDF}
+          deleteExistingPdf={deleteExistingPdf}
           pages={
             error
               ? [

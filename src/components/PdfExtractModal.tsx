@@ -9,6 +9,8 @@ interface PdfExtractModalProps {
   selectedPages: number[];
   pdfName: string;
   onPdfNameChange: (newName: string) => void;
+  deleteExistingPdf: boolean;
+  handleDeleteExistingPDF: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const PdfExtractModal: React.FC<PdfExtractModalProps> = ({
@@ -19,14 +21,17 @@ const PdfExtractModal: React.FC<PdfExtractModalProps> = ({
   selectedPages,
   pdfName,
   onPdfNameChange,
+  deleteExistingPdf,
+  handleDeleteExistingPDF,
 }) => {
   return (
     <div className="fixed inset-0 flex justify-center items-center z-50 bg-black/50">
-      <div className="bg-white w-[100%] max-w-[90vw] h-[90vh] p-6 rounded-lg flex flex-col">
+      <div className="bg-white w-[100%] max-w-[90vw] h-[95vh] p-6 rounded-lg flex flex-col">
         <div className="flex justify-between items-center mb-4">
-          <div className="flex items-center">
-            <h2 className="text-lg font-bold mr-4">SELECT PAGES TO EXTRACT</h2>
-            <h2 className="text-lg font-bold mr-4"> - FILE NAME</h2>
+          <div className="flex items-center space-x-8">
+            <h2 className="text-lg font-bold">SELECT PAGES TO EXTRACT</h2>
+            <h2 className="text-lg font-bold">- FILE NAME</h2>
+
             <input
               type="text"
               value={pdfName}
@@ -34,6 +39,7 @@ const PdfExtractModal: React.FC<PdfExtractModalProps> = ({
               className="text-lg font-bold border-2 border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-52"
             />
           </div>
+
           <button
             onClick={onClose}
             className="bg-gray-200 px-4 py-2 cursor-pointer rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
@@ -57,7 +63,26 @@ const PdfExtractModal: React.FC<PdfExtractModalProps> = ({
               )}`
             : "No pages selected yet."}
         </div>
-        <div className="mt-6 flex justify-center">
+
+        <div className="mt-6 flex flex-col items-center space-y-4">
+          <label className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              checked={deleteExistingPdf}
+              onChange={handleDeleteExistingPDF}
+              className="mr-2"
+            />
+            <span>Delete Existing PDF</span>
+          </label>
+          {deleteExistingPdf ? (
+            <p className="text-sm text-red-600">
+              The Existing PDF will be deleted.
+            </p>
+          ) : (
+            <p className="text-sm text-green-600">
+              The Existing PDF will not be deleted.
+            </p>
+          )}
           <button
             onClick={onSubmit}
             className="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-500 cursor-pointer"

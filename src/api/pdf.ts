@@ -43,6 +43,7 @@ const getPdfs = async ({
     - pages: A list of page numbers to extract from the PDF.
     - pdfId: The unique identifier of the PDF to extract pages from.
     - pdfName: The desired name for the newly created PDF.
+    - deleteExistingPdf: True or False for deleting existing PDF
     Returns: The server's response with the extracted pages (HTTP 200).
     Throws: An error if the request fails or returns an error.
 */
@@ -50,14 +51,17 @@ const extractPages = async ({
   pages,
   pdfId,
   pdfName,
+  deleteExistingPdf,
 }: {
   pages: number[];
   pdfId: string;
   pdfName: string;
+  deleteExistingPdf: boolean;
 }) => {
   const response = await axiosInstance.post(`pdf/extract/${pdfId}`, {
     pages: pages,
     fileName: pdfName,
+    deleteExistingPdf: deleteExistingPdf,
   });
   return response.data;
 };
